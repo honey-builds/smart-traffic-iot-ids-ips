@@ -101,3 +101,21 @@ This project demonstrates how a simulated IoT network can be extended from basic
 It also integrates NS-3 with an interactive dashboard for visualizing network performance and security decisions.
 
 **Project Type:** Academic Network Simulation and Cybersecurity Project
+
+## Project Screenshots
+
+### Network Architecture
+![Network Architecture](network-architecture.png)
+
+### Normal Traffic Dashboard — 0 Kbps Extra
+![Normal Traffic](normal-dashboard.png)
+
+### High-Traffic Dashboard — 775 Kbps Extra
+![High Traffic IPS](high-traffic-dashboard.png)
+
+### IDS Detection Results
+![IDS Detection](ids-detection.png)
+
+### IPS Final Results
+![IPS Results](ips-results.png)
+  
