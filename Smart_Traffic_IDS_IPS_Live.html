@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Traffic IoT Monitoring</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: #eef2f7;
+
+            color: #1f2937;
+
+        }
+
+
+        /* ---------------- HEADER ---------------- */
+
+        .header {
+
+            background: #172033;
+
+            color: white;
+
+            padding: 25px;
+
+            text-align: center;
+
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 30px;
+
+        }
+
+
+        .header p {
+
+            margin: 8px 0 0;
+
+            color: #cbd5e1;
+
+        }
+
+
+        /* ---------------- MAIN ---------------- */
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 25px;
+
+        }
+
+
+        /* ---------------- TRAFFIC CONTROL ---------------- */
+
+        .control-panel {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .control-panel h2 {
+
+            margin-top: 0;
+
+        }
+
+
+        .slider-container {
+
+            margin-top: 20px;
+
+        }
+
+
+        .slider {
+
+            width: 100%;
+
+            height: 8px;
+
+            cursor: pointer;
+
+        }
+
+
+        .slider-value {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin-top: 12px;
+
+        }
+
+
+        .traffic-labels {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #64748b;
+
+            font-size: 14px;
+
+        }
+
+
+        /* ---------------- STATUS ---------------- */
+
+        .status {
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .normal {
+
+            background: #dcfce7;
+
+            color: #166534;
+
+        }
+
+
+        .warning {
+
+            background: #fef3c7;
+
+            color: #92400e;
+
+        }
+
+
+        .anomaly {
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+        }
+
+
+        /* ---------------- CARDS ---------------- */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 14px;
+
+            text-align: center;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+        }
+
+
+        .card h3 {
+
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 15px;
+
+        }
+
+
+        .card-value {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            margin-top: 10px;
+
+            color: #111827;
+
+        }
+
+
+        /* ---------------- GRAPHS ---------------- */
+
+        .graph-section {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .graph-section h2 {
+
+            margin-top: 0;
+
+        }
+
+
+        canvas {
+
+            width: 100% !important;
+
+            height: 300px !important;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+        }
+
+
+        /* ---------------- NETWORK ---------------- */
+
+        .network {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+            text-align: center;
+
+        }
+
+
+        .network h2 {
+
+            margin-top: 0;
+
+        }
+
+
+        .network-row {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-top: 25px;
+
+        }
+
+
+        .node {
+
+            padding: 18px 25px;
+
+            background: #e0f2fe;
+
+            border: 2px solid #0284c7;
+
+            border-radius: 12px;
+
+            font-weight: bold;
+
+        }
+
+
+        .gateway {
+
+            background: #fef3c7;
+
+            border-color: #d97706;
+
+        }
+
+
+        .server {
+
+            background: #dcfce7;
+
+            border-color: #16a34a;
+
+        }
+
+
+        .arrow {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* ---------------- REFERENCE ---------------- */
+
+        .reference {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+
+            margin-top: 20px;
+
+        }
+
+
+        .reference table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        .reference th,
+
+        .reference td {
+
+            padding: 12px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            text-align: center;
+
+        }
+
+
+        .reference th {
+
+            background: #f1f5f9;
+
+        }
+
+
+        /* ---------------- FOOTER ---------------- */
+
+        .footer {
+
+            text-align: center;
+
+            color: #64748b;
+
+            padding: 25px;
+
+            font-size: 14px;
+
+        }
+
+
+
+        /* ---------------- IDS CONTROLS ---------------- */
+        .ids-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 22px;
+        }
+
+        .select-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .select-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 9px;
+            color: #334155;
+        }
+
+        .select-box select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .ids-details {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .ids-details h2 {
+            margin-top: 0;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .detail-item .label {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .detail-item .value {
+            font-weight: bold;
+        }
+
+        .detection-list {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .detection-item {
+            padding: 13px;
+            border-radius: 9px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        @media(max-width: 750px) {
+            .ids-controls,
+            .detail-grid,
+            .detection-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------------- MOBILE ---------------- */
+
+        @media(max-width: 750px) {
+
+            .cards {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .header h1 {
+
+                font-size: 23px;
+
+            }
+
+
+            .network-row {
+
+                flex-direction: column;
+
+            }
+
+
+            .arrow {
+
+                transform: rotate(90deg);
+
+            }
+
+        }
+
+        .actual-table{width:100%;border-collapse:collapse;min-width:540px}
+        .actual-table th,.actual-table td{padding:11px;text-align:center;border-bottom:1px solid #e2e8f0}
+        .actual-table th{background:#f1f5f9}
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ========================================================= -->
+
+<!-- HEADER -->
+
+<!-- ========================================================= -->
+
+
+<div class="header">
+
+    <h1>SMART TRAFFIC IoT MONITORING</h1>
+
+    <p>
+
+        Performance and Security Analysis Using NS-3
+
+    </p>
+
+</div>
+
+
+
+<div class="container">
+
+<!-- Measured results updated by NS-3 backend. -->
+<section class="control-panel" id="measuredResults" aria-label="Measured NS-3 IDS and IPS results">
+  <h2>🛡️ Actual NS-3 IDS / IPS Results</h2>
+  <p id="dataOrigin" style="color:#475569">Previous verified simulation snapshot. Run NS-3 below for fresh measurements.</p>
+  <label for="resultsFile" style="font-weight:bold;display:block;margin:12px 0 8px">Load latest simulation result (dashboard-results.json)</label>
+  <input type="file" id="resultsFile" accept=".json,application/json" style="max-width:100%;font-size:15px">
+  <p id="loadMessage" role="status" style="color:#475569;font-size:14px">Start the Python server and click Run NS-3 Simulation. The existing numbers are a previous snapshot, not live.</p>
+  <div class="cards" id="measuredCards" style="margin-top:18px">
+    <div class="card"><h3>Packets sent</h3><div class="card-value" id="actualSent">15,306</div></div>
+    <div class="card"><h3>Packets received</h3><div class="card-value" id="actualReceived">5,092</div></div>
+    <div class="card"><h3>Packets lost / blocked</h3><div class="card-value" id="actualLost">10,214</div></div>
+    <div class="card"><h3>Overall PDR</h3><div class="card-value" id="actualPdr">33.268%</div></div>
+    <div class="card"><h3>Sensor 1 IPS drops</h3><div class="card-value" id="actualIps">9,902</div></div>
+    <div class="card"><h3>Unknown node IPS drops</h3><div class="card-value" id="actualUnknown">312</div></div>
+  </div>
+  <div class="detail-grid" style="margin-bottom:18px">
+    <div class="detail-item"><span class="label">Source identity IDS</span><span class="value" id="actualSource">ALERT</span></div>
+    <div class="detail-item"><span class="label">Communication policy IDS</span><span class="value" id="actualPolicy">ALERT</span></div>
+    <div class="detail-item"><span class="label">High-traffic IDS / IPS</span><span class="value" id="actualTraffic">ALERT / ACTIVE</span></div>
+  </div>
+  <h3>Sensor-wise measured delivery</h3>
+  <div style="overflow-x:auto"><table class="actual-table"><thead><tr><th>Sensor</th><th>Sent</th><th>Received</th><th>Delivery</th><th>Rate (pkt/s)</th><th>IPS</th></tr></thead><tbody id="actualSensorRows"></tbody></table></div>
+  <p style="color:#64748b;font-size:13px;margin-top:12px">Packet loss includes intentionally blocked traffic. The current IPS uses gateway interface filters for Sensor 1 and the unknown node.</p>
+</section>
+
+
+
+<!-- ========================================================= -->
+
+<!-- TRAFFIC CONTROL -->
+
+<!-- ========================================================= -->
+
+
+<div class="control-panel">
+
+    <h2>🚦 Run Actual NS-3 Traffic Simulation</h2>
+
+    <p>
+
+        Choose additional Sensor 1 traffic in Kbps, then click Run Simulation. The IDS/IPS decisions and packet statistics are measured in NS-3.
+
+    </p>
+
+
+    <div class="slider-container">
+
+
+        <input
+
+            type="range"
+
+            min="10"
+
+            max="100"
+
+            value="10"
+
+            class="slider"
+
+            id="trafficSlider"
+
+        >
+
+
+        <div class="slider-value">
+
+            Traffic Load:
+
+            <span id="trafficValue">10%</span>
+
+        </div>
+
+
+        <button id="runNs3" type="button" style="margin-top:18px;padding:13px 20px;border:0;border-radius:9px;background:#1d4ed8;color:white;font-size:16px;cursor:pointer">▶ Run NS-3 Simulation</button>
+        <div class="traffic-labels">
+
+            <span>0 Kbps</span>
+
+            <span>400 Kbps</span>
+
+            <span>800 Kbps</span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+
+<div class="ids-controls">
+    <div class="select-box">
+        <label for="sourceSelector">🔐 Source selector (not connected)</label>
+        <select id="sourceSelector">
+            <option value="sensor1">Sensor 1</option>
+            <option value="sensor2">Sensor 2</option>
+            <option value="sensor3">Sensor 3</option>
+            <option value="sensor4">Sensor 4</option>
+            <option value="sensor5">Sensor 5</option>
+            <option value="unknown">Unknown Node</option>
+        </select>
+    </div>
+
+    <div class="select-box">
+        <label for="pathSelector">🚫 Path selector (not connected)</label>
+        <select id="pathSelector">
+            <option value="allowed">Sensor → Gateway → Server</option>
+            <option value="sensor_server">Sensor → Server</option>
+            <option value="unknown_server">Unknown Node → Server</option>
+        </select>
+    </div>
+</div>
+
+<!-- STATUS -->
+
+<!-- ========================================================= -->
+
+
+<div
+
+    id="status"
+
+    class="status normal"
+
+>
+
+    STATUS : NO ANOMALY
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+
+<!-- ========================================================= -->
+<!-- IDS DECISION DETAILS -->
+<!-- ========================================================= -->
+
+<div class="ids-details">
+    <h2>🔎 IDS Detection</h2>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="label">Source Identity</span>
+            <span class="value" id="sourceStatus">REGISTERED</span>
+        </div>
+        <div class="detail-item">
+            <span class="label">Communication Policy</span>
+            <span class="value" id="pathStatus">ALLOWED</span>
+        </div>
+        <div class="detail-item">
+            <span class="label">Traffic Behaviour</span>
+            <span class="value" id="trafficStatus">NORMAL</span>
+        </div>
+    </div>
+
+    <div class="detection-list">
+        <div class="detection-item" id="sourceDetection">🔐 Source Identity: CLEAR</div>
+        <div class="detection-item" id="policyDetection">🚫 Communication Policy: CLEAR</div>
+        <div class="detection-item" id="trafficDetection">📈 Traffic Behaviour: NORMAL</div>
+    </div>
+</div>
+
+<!-- METRIC CARDS -->
+
+<!-- ========================================================= -->
+
+
+<div class="cards">
+
+
+    <div class="card">
+
+        <h3>Packets Sent</h3>
+
+        <div
+
+            class="card-value"
+
+            id="packetsSent"
+
+        >
+
+            100
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Packets Received</h3>
+
+        <div
+
+            class="card-value"
+
+            id="packetsReceived"
+
+        >
+
+            100
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Packets Lost</h3>
+
+        <div
+
+            class="card-value"
+
+            id="packetsLost"
+
+        >
+
+            0
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Packet Delivery Ratio</h3>
+
+        <div
+
+            class="card-value"
+
+            id="pdr"
+
+        >
+
+            100%
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Average Delay</h3>
+
+        <div
+
+            class="card-value"
+
+            id="delay"
+
+        >
+
+            4.832 ms
+
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Throughput</h3>
+
+        <div
+
+            class="card-value"
+
+            id="throughput"
+
+        >
+
+            0.010 Mbps
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+<!-- DELAY GRAPH -->
+
+<!-- ========================================================= -->
+
+
+<div class="graph-section">
+
+    <h2>📈 Measured Average Delay vs Sensor 1 Extra Traffic</h2>
+
+    <canvas id="delayGraph"></canvas>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+<!-- PDR GRAPH -->
+
+<!-- ========================================================= -->
+
+
+<div class="graph-section">
+
+    <h2>📊 Measured PDR vs Sensor 1 Extra Traffic</h2>
+
+    <canvas id="pdrGraph"></canvas>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+<!-- THROUGHPUT GRAPH -->
+
+<!-- ========================================================= -->
+
+
+<div class="graph-section">
+
+    <h2>📶 Measured Throughput vs Sensor 1 Extra Traffic</h2>
+
+    <canvas id="throughputGraph"></canvas>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+<!-- NETWORK TOPOLOGY -->
+
+<!-- ========================================================= -->
+
+
+<div class="network">
+
+    <h2>🌐 Smart Traffic IoT Network</h2>
+
+
+    <div class="network-row">
+
+
+        <div class="node">
+
+            Sensor 1
+
+        </div>
+
+
+        <div class="node">
+
+            Sensor 2
+
+        </div>
+
+
+        <div class="node">
+
+            Sensor 3
+
+        </div>
+
+
+        <div class="node">
+
+            Sensor 4
+
+        </div>
+
+
+        <div class="node">
+
+            Sensor 5
+
+        </div>
+
+
+    </div>
+
+
+    <div class="network-row">
+
+
+        <div class="arrow">
+
+            ↓
+
+        </div>
+
+
+    </div>
+
+
+    <div class="network-row">
+
+
+        <div class="node gateway">
+
+            IoT Gateway
+
+        </div>
+
+
+        <div class="arrow">
+
+            →
+
+        </div>
+
+
+        <div class="node server">
+
+            Traffic Monitoring Server
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+<!-- ACTUAL NS-3 RESULTS -->
+
+<!-- ========================================================= -->
+
+
+<div class="reference">
+
+    <h2>📌 Earlier NS-3 Reference Results (Separate Experiments)</h2>
+
+
+    <p>
+
+        The following values come from earlier normal/high-traffic experiments, not the current IDS/IPS run. They were measured in
+
+        the NS-3 simulations used in this project.
+
+    </p>
+
+
+    <table>
+
+
+        <tr>
+
+            <th>Metric</th>
+
+            <th>Normal Traffic</th>
+
+            <th>High Traffic</th>
+
+        </tr>
+
+
+        <tr>
+
+            <td>Packets Sent</td>
+
+            <td>100</td>
+
+            <td>50,000</td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>Packets Received</td>
+
+            <td>100</td>
+
+            <td>48,269</td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>Packets Lost</td>
+
+            <td>0</td>
+
+            <td>1,731</td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>PDR</td>
+
+            <td>100%</td>
+
+            <td>96.538%</td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>Average Delay</td>
+
+            <td>4.832 ms</td>
+
+            <td>42.7879 ms</td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>Throughput</td>
+
+            <td>0.01024 Mbps</td>
+
+            <td>4.94275 Mbps</td>
+
+        </tr>
+
+
+    </table>
+
+</div>
+
+
+
+</div>
+
+
+
+<div class="footer">
+
+    Smart Traffic IoT Network | NS-3 Simulation Project
+
+</div>
+
+
+
+<!-- ========================================================= -->
+
+<!-- JAVASCRIPT -->
+
+<!-- ========================================================= -->
+
+
+<script>
+const $ = id => document.getElementById(id);
+const history = [];
+const format = n => Number(n).toLocaleString();
+function render(data, origin) {
+  if (!data || !Array.isArray(data.sensors) || data.sensors.length !== 5 ||
+      !['packetsSent','packetsReceived','packetsLost','pdr','sensorBlockedPackets','unknownBlockedPackets'].every(k=>Number.isFinite(data[k]))) {
+    throw new Error('Invalid NS-3 results JSON');
+  }
+  const put = (id, value) => { if ($(id)) $(id).textContent = value; };
+  put('dataOrigin', 'Data source: '+origin);
+  put('actualSent',format(data.packetsSent)); put('actualReceived',format(data.packetsReceived));
+  put('actualLost',format(data.packetsLost)); put('actualPdr',Number(data.pdr).toFixed(3)+'%');
+  put('actualIps',format(data.sensorBlockedPackets)); put('actualUnknown',format(data.unknownBlockedPackets));
+  put('actualSource',data.unknownNodeDetected?'ALERT':'NORMAL');
+  put('actualPolicy',data.policyViolation?'ALERT':'NORMAL');
+  put('actualTraffic',(data.highTrafficDetected?'ALERT':'NORMAL')+' / '+(data.ipsActive?'ACTIVE':'INACTIVE'));
+  const tbody=$('actualSensorRows'); tbody.replaceChildren();
+  data.sensors.forEach(s=>{
+    const row=document.createElement('tr');
+    ['Sensor '+s.id,format(s.sent),format(s.received),s.sent?(100*s.received/s.sent).toFixed(2)+'%':'—',Number(s.ratePps).toFixed(1),s.blocked?'ACTIVE':'INACTIVE'].forEach(v=>{
+      const cell=document.createElement('td'); cell.textContent=v; row.appendChild(cell);
+    }); tbody.appendChild(row);
+  });
+  put('packetsSent',format(data.packetsSent)); put('packetsReceived',format(data.packetsReceived));
+  put('packetsLost',format(data.packetsLost)); put('pdr',Number(data.pdr).toFixed(3)+'%');
+  put('delay',Number.isFinite(data.averageDelayMs)?data.averageDelayMs.toFixed(3)+' ms':'Not measured');
+  put('throughput',Number.isFinite(data.throughputMbps)?data.throughputMbps.toFixed(4)+' Mbps':'Not measured');
+  put('sourceStatus',data.unknownNodeDetected?'UNREGISTERED':'REGISTERED');
+  put('pathStatus',data.policyViolation?'VIOLATION':'ALLOWED');
+  put('trafficStatus',data.highTrafficDetected?'CRITICAL':'NORMAL');
+  put('sourceDetection','Source identity: '+(data.unknownNodeDetected?'UNKNOWN NODE':'CLEAR'));
+  put('policyDetection','Communication policy: '+(data.policyViolation?'VIOLATION':'CLEAR'));
+  put('trafficDetection','Traffic behaviour: '+(data.highTrafficDetected?'HIGH TRAFFIC':'NORMAL'));
+  const alerted=data.unknownNodeDetected||data.policyViolation||data.highTrafficDetected;
+  $('status').className='status '+(alerted?'anomaly':'normal');
+  put('status',alerted?'IDS ALERT — '+(data.ipsActive?'SENSOR 1 IPS ACTIVE':'CHECK SOURCE / POLICY'):'IDS NORMAL');
+  if(Number.isFinite(data.extraRateKbps)){
+    const load=Math.max(0,Math.min(800,data.extraRateKbps));
+    history.push({load,delay:data.averageDelayMs,pdr:data.pdr,throughput:data.throughputMbps});
+    drawHistory();
+  }
+}
+function drawHistory(){
+  [['delayGraph','delay','Delay (ms)'],['pdrGraph','pdr','PDR (%)'],['throughputGraph','throughput','Throughput (Mbps)']].forEach(([id,key,title])=>{
+    const canvas=$(id), ctx=canvas.getContext('2d');
+    const width=Math.max(300,canvas.clientWidth),height=300,dpr=window.devicePixelRatio||1;
+    canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,width,height);ctx.fillStyle='#334155';ctx.font='15px Arial';ctx.fillText(title,15,25);
+    const pts=history.filter(x=>Number.isFinite(x[key])).sort((a,b)=>a.load-b.load);
+    if(!pts.length){ctx.fillStyle='#64748b';ctx.fillText('Run NS-3 to display measured points.',15,65);return;}
+    const left=55,right=width-20,top=45,bottom=height-42;
+    const max=Math.max(1,...pts.map(x=>x[key]))*1.15;
+    ctx.strokeStyle='#94a3b8';ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,bottom);ctx.lineTo(right,bottom);ctx.stroke();
+    ctx.fillStyle='#475569';ctx.font='12px Arial';ctx.fillText('0',left-15,bottom+17);ctx.fillText('800 Kbps',right-65,bottom+22);ctx.fillText(max.toFixed(2),5,top+4);
+    ctx.strokeStyle='#2563eb';ctx.lineWidth=2;ctx.beginPath();pts.forEach((x,i)=>{const px=left+x.load/800*(right-left),py=bottom-x[key]/max*(bottom-top);i?ctx.lineTo(px,py):ctx.moveTo(px,py)});ctx.stroke();
+    pts.forEach(x=>{const px=left+x.load/800*(right-left),py=bottom-x[key]/max*(bottom-top);ctx.fillStyle='#2563eb';ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill()});
+  });
+}
+const slider=$('trafficSlider');
+slider.min='0';slider.max='800';slider.step='25';slider.value='800';
+const showSlider=()=>{$('trafficValue').textContent=slider.value+' Kbps extra (Sensor 1)'};
+slider.addEventListener('input',showSlider);showSlider();
+let busy=false;
+async function runSimulation(){
+  if(busy)return;
+  busy=true;$('runNs3').disabled=true;$('loadMessage').textContent='Running NS-3 in Ubuntu WSL. Please wait…';
+  try {
+    const response=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({extraRateKbps:Number(slider.value)})});
+    const result=await response.json();
+    if(!response.ok)throw new Error(result.error||'Simulation failed');
+    render(result.data,'Fresh NS-3 run: Sensor 1 extra '+slider.value+' Kbps');
+    $('loadMessage').textContent='Simulation completed. All displayed metrics are from NS-3.';
+  }catch(e){$('loadMessage').textContent='Error: '+e.message;}
+  finally{busy=false;$('runNs3').disabled=false;}
+}
+$('runNs3').addEventListener('click',runSimulation);
+$('resultsFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{render(JSON.parse(await f.text()),'Imported file '+f.name);$('loadMessage').textContent='Imported NS-3 JSON.';}catch(err){$('loadMessage').textContent=err.message;}});
+window.addEventListener('resize',drawHistory);drawHistory();
+$('sourceSelector').disabled=true;$('pathSelector').disabled=true;
+</script>
+
+
+</body>
+
+</html>
